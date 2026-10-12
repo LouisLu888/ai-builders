@@ -54,7 +54,7 @@ jobs:
           # Re-running the same day replaces that day's audio.
           gh release delete "$TAG" --cleanup-tag --yes 2>/dev/null || true
           gh release create "$TAG" "out/$FILE" \
-            --title "AI Builders 每日播报 $DATE" \
+            --title "AI 实干派 $DATE" \
             --notes "$(jq -r .title out/episode.json)" \
             --latest=false
 

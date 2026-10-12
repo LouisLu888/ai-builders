@@ -10,6 +10,8 @@
 // Usage:
 //   node update-feed.js --site <dir> --episode <episode.json>
 //     --audio-url <url> --audio-bytes <n> --base-url <https://.../>
+//   node update-feed.js --site <dir> --base-url <https://.../> --rebuild
+//     (re-render feed.xml from episodes.json, e.g. after renaming the show)
 //
 // Site files: episodes.json (episode list), state.json (covered item keys),
 // cover.jpg (artwork), feed.xml (generated).
@@ -20,8 +22,8 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 
 const SHOW = {
-  title: 'AI Builders 每日播报',
-  author: 'Follow Builders',
+  title: 'AI 实干派',
+  author: 'AI 实干派',
   description: '每天十分钟，听懂 AI 一线 builder 在 X、播客和官方博客上说了什么。由 follow-builders 自动生成。',
   language: 'zh-cn'
 };
@@ -88,10 +90,19 @@ ${items}
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
-  for (const key of ['site', 'episode', 'audio-url', 'audio-bytes', 'base-url']) {
+  const rebuild = process.argv.includes('--rebuild');
+  const required = rebuild ? ['site', 'base-url'] : ['site', 'episode', 'audio-url', 'audio-bytes', 'base-url'];
+  for (const key of required) {
     if (!args[key]) throw new Error(`--${key} is required`);
   }
   const baseUrl = args['base-url'].endsWith('/') ? args['base-url'] : `${args['base-url']}/`;
+
+  if (rebuild) {
+    const episodes = await readJson(join(args.site, 'episodes.json'), []);
+    await writeFile(join(args.site, 'feed.xml'), renderFeed(episodes, baseUrl));
+    console.error(`Feed rebuilt: ${episodes.length} episodes`);
+    return;
+  }
   const meta = JSON.parse(await readFile(args.episode, 'utf-8'));
   if (meta.skip) throw new Error('episode.json is a skip marker; nothing to publish');
 
