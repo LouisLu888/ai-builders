@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI Builders 每日播报</title>
+    <link>https://louislu888.github.io/follow-builders/</link>
+    <atom:link href="https://louislu888.github.io/follow-builders/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>每天十分钟，听懂 AI 一线 builder 在 X、播客和官方博客上说了什么。由 follow-builders 自动生成。</description>
+    <language>zh-cn</language>
+    <itunes:author>Follow Builders</itunes:author>
+    <itunes:image href="https://louislu888.github.io/follow-builders/cover.jpg"/>
+    <image><url>https://louislu888.github.io/follow-builders/cover.jpg</url><title>AI Builders 每日播报</title><link>https://louislu888.github.io/follow-builders/</link></image>
+    <itunes:category text="Technology"/>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:type>episodic</itunes:type>
+    <item>
+      <title>2026-10-11 · agent 安全与模型读心</title>
+      <description>今天重点聊 Goodfire 的 Eric Ho 对 reward hacking 和 interpretability 的判断，以及企业 agent 从能力走向信任、治理和 autonomy 的趋势。我们也看了 agent swarms、工程团队如何用 eval 和 autoplan，以及 PM 为什么会成为新瓶颈。</description>
+      <content:encoded><![CDATA[<p>今天重点聊 Goodfire 的 Eric Ho 对 reward hacking 和 interpretability 的判断，以及企业 agent 从能力走向信任、治理和 autonomy 的趋势。我们也看了 agent swarms、工程团队如何用 eval 和 autoplan，以及 PM 为什么会成为新瓶颈。</p><ul><li><a href="https://www.youtube.com/@DataDrivenNYC/videos">The MAD Podcast with Matt Turck: AI Models Are Now Hiding Their Cheating | Eric Ho (Goodfire)</a></li><li><a href="https://x.com/realmadhuguru/status/2108982858513776899">Madhu Guru on agentic security and trust</a></li><li><a href="https://x.com/levie/status/2108952226714865966">Aaron Levie on AI zero trust for enterprises</a></li><li><a href="https://x.com/levie/status/2109079686286565378">Aaron Levie on agent swarms and compute demand</a></li><li><a href="https://x.com/thenanyu/status/2108976262698115550">Nan Yu on agents, engineers, and PM bottlenecks</a></li><li><a href="https://x.com/danshipper/status/2108941466785439796">Dan Shipper on AI changing company Slack</a></li><li><a href="https://x.com/garrytan/status/2108954740013043789">Garry Tan on GStack autoplan workflow</a></li><li><a href="https://x.com/garrytan/status/2108954738540863498">Garry Tan on evals for retrieval, latency, and cost</a></li><li><a href="https://x.com/garrytan/status/2108954741065879945">Garry Tan on Captain mode and CI workflow</a></li></ul>]]></content:encoded>
+      <enclosure url="https://github.com/LouisLu888/follow-builders/releases/download/episode-2026-10-11/ai-builders-2026-10-11.mp3" length="5354349" type="audio/mpeg"/>
+      <guid isPermaLink="false">follow-builders-2026-10-11</guid>
+      <pubDate>Mon, 12 Oct 2026 03:56:57 GMT</pubDate>
+      <itunes:duration>00:11:09</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+  </channel>
+</rss>
