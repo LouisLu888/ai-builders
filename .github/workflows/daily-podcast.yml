@@ -1,0 +1,75 @@
+name: Daily Podcast
+
+on:
+  schedule:
+    # 08:30 UTC = 01:30 PDT / 00:30 PST — after the central feed refresh (~06:45 UTC),
+    # and still the same calendar day in Pacific time all year.
+    - cron: '30 8 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: daily-podcast
+  cancel-in-progress: false
+
+jobs:
+  episode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out gh-pages (feed site)
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: site
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Ensure ffmpeg
+        run: command -v ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+
+      - name: Build episode
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/podcast/build-episode.js --out out --state site/state.json
+
+      - name: Publish audio and update feed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$(jq -r .skip out/episode.json)" = "true" ]; then
+            echo "Nothing new today — no episode published."
+            exit 0
+          fi
+          DATE=$(jq -r .date out/episode.json)
+          TAG="episode-$DATE"
+          FILE="ai-builders-$DATE.mp3"
+          mv out/episode.mp3 "out/$FILE"
+
+          # Re-running the same day replaces that day's audio.
+          gh release delete "$TAG" --cleanup-tag --yes 2>/dev/null || true
+          gh release create "$TAG" "out/$FILE" \
+            --title "AI Builders 每日播报 $DATE" \
+            --notes "$(jq -r .title out/episode.json)" \
+            --latest=false
+
+          OWNER="${GITHUB_REPOSITORY%%/*}"
+          REPO="${GITHUB_REPOSITORY#*/}"
+          node scripts/podcast/update-feed.js \
+            --site site \
+            --episode out/episode.json \
+            --audio-url "https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/$FILE" \
+            --audio-bytes "$(stat -c %s "out/$FILE")" \
+            --base-url "https://${OWNER,,}.github.io/$REPO/"
+
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add episodes.json state.json feed.xml
+          git commit -m "episode: $DATE"
+          git push
